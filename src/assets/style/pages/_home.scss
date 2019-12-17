@@ -1,0 +1,14 @@
+// -----------------------------------------------------------------------------
+// This file contains styles that are specific to the home page.
+// -----------------------------------------------------------------------------
+
+.home {
+  &__hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &__title {
+      font-size: 5rem;
+    }
+  }
+}
