@@ -2,50 +2,43 @@
 // This file contains all application-wide Sass variables.
 // -----------------------------------------------------------------------------
 
-/// Regular font family
-/// @type List
-$text-font-stack: "Open Sans", "Helvetica Neue Light", "Helvetica Neue", "Helvetica", "Arial",
-  sans-serif !default;
+// -----------------------------------------------------------------------------
+// COLORS
+// -----------------------------------------------------------------------------
 
-/// Code (monospace) font family
-/// @type List
-$code-font-stack: "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Monaco", monospace !default;
+$color-accent: #00d4cf;
+$color-primary: #1e102c;
+$color-secondary: #000;
+$color-danger: #000;
+$color-warning: #000;
+$color-success: #000;
 
-/// Copy text color
-/// @type Color
-$text-color: rgb(34, 34, 34) !default;
+$color-bg-light: #f9f8ff;
 
-/// Main brand color
-/// @type Color
-$brand-color: rgb(229, 0, 80) !default;
+// -----------------------------------------------------------------------------
+// FONT
+// -----------------------------------------------------------------------------
 
-/// Light grey
-/// @type Color
-$light-grey: rgb(237, 237, 237) !default;
+$font-main: "Roboto";
 
-/// Medium grey
-/// @type Color
-$mid-grey: rgb(153, 153, 153) !default;
+// font weights
+$font-light: 300;
+$font-regular: 500;
+$font-bold: 700;
 
-/// Dark grey
-/// @type Color
-$dark-grey: rgb(68, 68, 68) !default;
+// font sizes
+$font-md: 1rem;
+$font-xl: 7rem;
 
-/// Container's maximum width
-/// @type Length
-$max-width: 1180px !default;
+// base font
+$base-font: $font-regular $font-md $font-main;
 
-/// Breakpoints map
-/// @prop {String} keys - Keys are identifiers mapped to a given length
-/// @prop {Map} values - Values are actual breakpoints expressed in pixels
-$breakpoints: (
-  "small": 320px,
-  "medium": 768px,
-  "large": 1024px
-) !default;
+// -----------------------------------------------------------------------------
+// BREAKPOINTS
+// -----------------------------------------------------------------------------
 
-/// Relative or absolute URL where all assets are served from
-/// @type String
-/// @example scss - When using a CDN
-///   $base-url: 'http://cdn.example.com/assets/';
-$base-url: "/assets/" !default;
+$screen-xs: 576px;
+$screen-sm: 768px;
+$screen-md: 992px;
+$screen-lg: 1200px;
+$screen-xl: 1440px;

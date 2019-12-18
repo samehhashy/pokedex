@@ -1,8 +1,11 @@
+import Vue from 'vue'
 import axios from 'axios'
 
-const request = axios.create({
+const globalAxios = axios.create({
   baseURL: process.env.BASE_URL,
   timeout: 20000
 })
 
-export default request
+Vue.prototype.$axios = globalAxios
+
+// export default globalAxios

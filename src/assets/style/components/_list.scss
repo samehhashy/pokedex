@@ -1,0 +1,22 @@
+.app-list {
+  padding: 1rem;
+  margin: 3rem auto;
+
+  &__subheader {
+    margin-bottom: 1rem;
+    font-size: $font-md;
+  }
+
+  &__avatar {
+  }
+
+  &__content {
+    &__title {
+    }
+  }
+
+  &__action {
+    margin-top: 2rem;
+    text-align: center;
+  }
+}
