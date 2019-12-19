@@ -21,3 +21,7 @@ body {
 *::after {
   box-sizing: inherit;
 }
+
+.v-icon.v-icon {
+  color: $color-accent;
+}

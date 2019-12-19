@@ -1,6 +1,12 @@
 .app-list {
   padding: 1rem;
-  margin: 3rem auto;
+  position: relative;
+  height: 50vmax;
+  overflow-y: auto;
+
+  .v-list {
+    margin: auto;
+  }
 
   &__subheader {
     margin-bottom: 1rem;
@@ -8,6 +14,20 @@
   }
 
   &__avatar {
+    position: relative;
+    &__num {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      background-color: $color-accent;
+      border: 1px solid $color-black;
+      color: $color-primary;
+      font-size: $font-sm;
+      border-radius: 50%;
+    }
   }
 
   &__content {
@@ -16,7 +36,7 @@
   }
 
   &__action {
-    margin-top: 2rem;
-    text-align: center;
+    margin: 2rem 0 0 !important;
+    width: 100%;
   }
 }

@@ -1,46 +1,73 @@
 <template>
-<div class="home">
+  <div class="home">
+    <v-parallax class="home__hero" src="@/assets/imgs/hero-img.jpg">
+      <div class="overlay" />
+      <h1 class="home__hero__title" v-text="'POKEDEX'" />
+    </v-parallax>
 
-  <v-parallax class="home__hero" src="@/assets/imgs/hero-img.jpg">
-  <div class="overlay" />
-  <h1 class="home__hero__title">POKEDEX</h1>
-  </v-parallax>
-
-  <main class="home__body">
-    <v-container>
-      <pokemon-list :items="pokemons" />
-    </v-container>
-  </main>
-
-</div>
+    <main class="home__body">
+      <v-container>
+        <v-row justify="space-around">
+          <v-col cols="12" sm="6" xl="5">
+            <pokemon-list
+              :items="pokemons"
+              @load-more="fetchData(meta.next)"
+              :loading="loading.page"
+              :no-pagination="hasNextPage"
+            />
+          </v-col>
+          <v-col cols="12" sm="6" xl="5">
+            <pokemon-details />
+          </v-col>
+        </v-row>
+      </v-container>
+    </main>
+  </div>
 </template>
 
 <script>
-
 export default {
-  name: 'Home',
+  name: "Home",
 
-  data () {
+  data() {
     return {
-      pokemons: []
-    }
+      pokemons: [],
+      meta: {
+        next: "",
+        count: null
+      },
+      loading: {
+        list: false,
+        page: false
+      }
+    };
   },
 
   components: {
-    PokemonList: () => import('@/components/AppList')
+    PokemonList: () => import("@/components/AppList"),
+    PokemonDetails: () => import("@/components/DetailsCard")
   },
 
-  methods: {
-    fetchData () {
-      this.$axios('pokemon').then(res => {
-        this.pokemons = res.data.results
-      })
+  computed: {
+    hasNextPage() {
+      return this.meta.count !== this.pokemons.length;
     }
   },
 
-  created () {
-    this.fetchData()
-  }
+  methods: {
+    fetchData(url = "pokemon") {
+      this.loading.page = true;
+      this.$axios(url).then(res => {
+        this.pokemons.push(...res.data.results);
+        this.meta.next = res.data.next;
+        this.meta.prev = res.data.previous;
+        this.loading.page = false;
+      });
+    }
+  },
 
-}
+  created() {
+    this.fetchData();
+  }
+};
 </script>

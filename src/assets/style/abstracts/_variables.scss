@@ -6,7 +6,7 @@
 // COLORS
 // -----------------------------------------------------------------------------
 
-$color-accent: #00d4cf;
+$color-accent: #3db29d;
 $color-primary: #1e102c;
 $color-secondary: #000;
 $color-danger: #000;
@@ -14,6 +14,9 @@ $color-warning: #000;
 $color-success: #000;
 
 $color-bg-light: #f9f8ff;
+
+$color-white: #fff;
+$color-black: #000;
 
 // -----------------------------------------------------------------------------
 // FONT
@@ -27,6 +30,7 @@ $font-regular: 500;
 $font-bold: 700;
 
 // font sizes
+$font-sm: 0.8rem;
 $font-md: 1rem;
 $font-xl: 7rem;
 

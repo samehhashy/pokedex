@@ -6,7 +6,7 @@
   &__hero {
     position: relative;
     text-align: center;
-    // margin-bottom: 3rem;
+    margin-bottom: 2rem;
     .v-parallax {
       &__content {
         width: 100%;
@@ -29,6 +29,5 @@
   }
 
   &__body {
-    
   }
 }

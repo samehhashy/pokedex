@@ -3,6 +3,7 @@
 // 1. Configuration and helpers
 @import
   'abstracts/variables',
+  'abstracts/animation',
   'abstracts/mixins';
 
 // 2. Vendors
@@ -22,6 +23,7 @@
 // 5. Components
 @import
   'components/list',
+  'components/card',
   'components/button';
 
 // 6. Page-specific styles

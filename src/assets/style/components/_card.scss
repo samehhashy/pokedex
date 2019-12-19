@@ -1,0 +1,13 @@
+.app-card {
+  &--floating {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    transition: transform 0.5s cubic-bezier(0.02, 1.25, 0.8, 1);
+  }
+
+  &.details-card {
+    height: 50vmax;
+  }
+}
