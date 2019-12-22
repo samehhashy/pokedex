@@ -1,13 +1,11 @@
 <template>
-  <v-card class="app-card" max-width="400">
+  <v-card min-width="300" height="300" :loading="loading" class="app-card" max-width="400">
     <v-card-title v-text="item.name" />
 
-    <!-- <v-card-subtitle>Number 10</v-card-subtitle>
+    <!-- <v-card-subtitle></v-card-subtitle>
 
     <v-card-text>
-      <div>Whitehaven Beach</div>
 
-      <div>Whitsunday Island, Whitsunday Islands</div>
     </v-card-text> -->
 
     <v-card-actions> </v-card-actions>
@@ -22,13 +20,10 @@ export default {
     url: {
       type: String,
       default: ""
-    }
-  },
-
-  computed: {
-    pokeItem() {
-      const pokeItem = JSON.parse(localStorage.pokeItem);
-      return pokeItem.name;
+    },
+    shown: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -41,18 +36,33 @@ export default {
 
   methods: {
     getData(url) {
-      if (this.pokeItem) {
-        console.log("TCL: getData -> this.pokeItem", this.pokeItem);
-        return this.pokeItem;
-      }
       this.loading = true;
-      this.$axios(url).then(res => {
-        this.item = res.data;
-        localStorage.setItem("pokeItem", JSON.stringify(this.item));
-        this.loading = false;
+      this.reqTimer().then(() => {
+        if (this.shown) {
+          this.$axios(url).then(res => {
+            this.item = res.data;
+            this.loading = false;
+          });
+        }
+      });
+    },
+
+    storeData(data) {
+      this.$store.dispatch("appendPokemon", data);
+    },
+
+    reqTimer() {
+      new Promise(resolve => {
+        setTimeout(() => {
+          resolve();
+        }, 1500);
       });
     }
   },
+
+  // mounted() {
+  //   this.url && this.getData(this.url);
+  // }
 
   watch: {
     url: {

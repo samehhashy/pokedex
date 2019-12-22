@@ -35,10 +35,12 @@
       </v-list-item-action>
     </v-list>
 
+    <!-- HOVER CARD -->
     <transition name="fade">
-      <pokemon-card
+      <pokemon-hover-card
         :url="itemURL"
-        v-show="pokemonCard"
+        :shown="pokemonCard"
+        v-if="pokemonCard"
         class="app-card--floating"
         :style="cardPosition"
         @mousemove="pokemonCard = true"
@@ -54,7 +56,7 @@ export default {
   name: "AppList",
 
   components: {
-    PokemonCard: () => import("@/components/AppCard")
+    PokemonHoverCard: () => import("@/components/AppCard")
   },
 
   props: {
@@ -97,9 +99,18 @@ export default {
     showCard(url, e) {
       this.position.x = e.clientX + 20;
       this.position.y = e.clientY - 60;
-      this.itemURL = url;
       this.pokemonCard = true;
+      this.itemURL = url;
+      // this.changeURL().then(() => this.pokemonCard && (this.itemURL = url));
     },
+
+    // changeURL(url) {
+    //   return new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //       resolve();
+    //     }, 2000);
+    //   });
+    // },
 
     hideCard() {
       this.pokemonCard = false;

@@ -16,6 +16,7 @@
               :no-pagination="hasNextPage"
             />
           </v-col>
+
           <v-col cols="12" sm="6" xl="5">
             <pokemon-details />
           </v-col>

@@ -1,6 +1,6 @@
 <template>
   <v-card elevation="10" class="app-card details-card">
-    details
+    {{ data }}
   </v-card>
 </template>
 

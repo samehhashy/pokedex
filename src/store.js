@@ -17,11 +17,13 @@ export default new Vuex.Store({
   state: {
     pokemons: []
   },
+
   mutations: {
     APPEND_POKEMON(state, payload) {
       state.pokemons.push(payload);
     }
   },
+
   actions: {
     appendPokemon({ commit }, payload) {
       commit("APPEND_POKEMON", payload);
