@@ -4,11 +4,23 @@
       <v-subheader class="app-list__subheader" v-text="'Select Your Pokemon'" />
 
       <!-- ITEM -->
-      <v-list-item-group v-for="(item, i) in items" :key="i">
-        <v-list-item @mouseenter="showCard(item.url, $event)" @mouseleave="hideCard">
+      <v-list-item-group v-for="(item, index) in pokemonList" :key="index">
+        <v-list-item
+          @mouseenter="
+            toggleHoverCard({
+              active: true,
+              url: item.url,
+              position: {
+                x: $event.clientX + 20,
+                y: $event.clientY - 60
+              }
+            })
+          "
+          @mouseleave="toggleHoverCard"
+        >
           <v-list-item-avatar class="app-list__avatar">
             <v-img class="app-list__avatar__img" src="@/assets/icons/pokemon-icon.svg" />
-            <span class="app-list__avatar__num" v-text="i + 1" />
+            <span class="app-list__avatar__num" v-text="index + 1" />
           </v-list-item-avatar>
 
           <v-list-item-content class="app-list__content">
@@ -24,8 +36,8 @@
       <!-- PAGINATION -->
       <v-list-item-action class="app-list__action">
         <v-btn
-          :loading="loading"
-          v-if="hasPagination"
+          :loading="loading.page"
+          v-if="hasNextPage"
           depressed
           block
           class="btn btn--more"
@@ -34,86 +46,50 @@
         >
       </v-list-item-action>
     </v-list>
-
-    <!-- HOVER CARD -->
-    <transition name="fade">
-      <pokemon-hover-card
-        :url="itemURL"
-        :shown="pokemonCard"
-        v-if="pokemonCard"
-        class="app-card--floating"
-        :style="cardPosition"
-        @mousemove="pokemonCard = true"
-      />
-    </transition>
   </v-card>
 </template>
 
 <script>
 import { upperFirst } from "lodash";
+import { mapGetters } from "vuex";
 
 export default {
   name: "AppList",
 
-  components: {
-    PokemonHoverCard: () => import("@/components/AppCard")
-  },
-
-  props: {
-    items: {
-      type: Array,
-      required: true
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    hasPagination: {
-      type: Boolean,
-      default: true
-    }
-  },
-
   data() {
     return {
-      pokemonCard: false,
-      position: {
-        x: 0,
-        y: 0
-      },
-      itemURL: ""
+      meta: { next: "", count: null },
+      loading: { list: false, page: false }
     };
   },
 
   computed: {
-    cardPosition() {
-      return {
-        transform: `translate3d(${this.position.x}px, ${this.position.y}px, 0)`
-      };
-    }
+    hasNextPage() {
+      return this.meta.count !== this.pokemonList.length;
+    },
+    ...mapGetters(["pokemonList"])
+  },
+
+  created() {
+    this.getListItems();
   },
 
   methods: {
     upperFirst,
 
-    showCard(url, e) {
-      this.position.x = e.clientX + 20;
-      this.position.y = e.clientY - 60;
-      this.pokemonCard = true;
-      this.itemURL = url;
-      // this.changeURL().then(() => this.pokemonCard && (this.itemURL = url));
+    getListItems() {
+      this.loading.page = true;
+      this.$store
+        .dispatch("fetchPokemons")
+        .then(meta => {
+          this.meta = meta;
+          this.loading.page = false;
+        })
+        .catch(() => (this.loading.page = false));
     },
 
-    // changeURL(url) {
-    //   return new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //       resolve();
-    //     }, 2000);
-    //   });
-    // },
-
-    hideCard() {
-      this.pokemonCard = false;
+    toggleHoverCard(payload) {
+      this.$store.dispatch("toggleHoverCard", payload);
     }
   }
 };

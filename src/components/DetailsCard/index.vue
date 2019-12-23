@@ -5,14 +5,13 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "DetailsCard",
 
-  props: {
-    data: {
-      type: Object,
-      required: true
-    }
+  computed: {
+    ...mapGetters({ data: "currPokemon" })
   }
 };
 </script>

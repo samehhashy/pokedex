@@ -8,67 +8,40 @@
     <main class="home__body">
       <v-container>
         <v-row justify="space-around">
+          <!-- LIST ITEMS -->
           <v-col cols="12" sm="6" xl="5">
-            <pokemon-list
-              :items="pokemons"
-              @load-more="fetchData(meta.next)"
-              :loading="loading.page"
-              :no-pagination="hasNextPage"
-            />
+            <pokemon-list />
           </v-col>
 
+          <!-- DETAILS CARD -->
           <v-col cols="12" sm="6" xl="5">
             <pokemon-details />
           </v-col>
         </v-row>
       </v-container>
     </main>
+
+    <!-- HOVER CARD -->
+    <transition name="fade">
+      <hover-card v-show="hoverCard.active" />
+    </transition>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Home",
 
-  data() {
-    return {
-      pokemons: [],
-      meta: {
-        next: "",
-        count: null
-      },
-      loading: {
-        list: false,
-        page: false
-      }
-    };
-  },
-
   components: {
     PokemonList: () => import("@/components/AppList"),
-    PokemonDetails: () => import("@/components/DetailsCard")
+    PokemonDetails: () => import("@/components/DetailsCard"),
+    HoverCard: () => import("@/components/HoverCard")
   },
 
   computed: {
-    hasNextPage() {
-      return this.meta.count !== this.pokemons.length;
-    }
-  },
-
-  methods: {
-    fetchData(url = "pokemon") {
-      this.loading.page = true;
-      this.$axios(url).then(res => {
-        this.pokemons.push(...res.data.results);
-        this.meta.next = res.data.next;
-        this.meta.prev = res.data.previous;
-        this.loading.page = false;
-      });
-    }
-  },
-
-  created() {
-    this.fetchData();
+    ...mapGetters(["hoverCard"])
   }
 };
 </script>
