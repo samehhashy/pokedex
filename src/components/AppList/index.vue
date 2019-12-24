@@ -4,7 +4,7 @@
       <v-subheader class="app-list__subheader" v-text="'Select Your Pokemon'" />
 
       <!-- ITEM -->
-      <v-list-item-group v-for="(item, index) in pokemonList" :key="index">
+      <v-list-item-group v-for="(item, index) in listData" :key="index">
         <v-list-item
           @mouseenter="
             toggleHoverCard({
@@ -50,24 +50,24 @@
 </template>
 
 <script>
-import { upperFirst } from "lodash";
-import { mapGetters } from "vuex";
+import upperFirst from "lodash/upperFirst";
 
 export default {
   name: "AppList",
 
   data() {
     return {
-      meta: { next: "", count: null },
+      listData: [],
+      next: "",
+      count: 0,
       loading: { list: false, page: false }
     };
   },
 
   computed: {
     hasNextPage() {
-      return this.meta.count !== this.pokemonList.length;
-    },
-    ...mapGetters(["pokemonList"])
+      return this.count !== this.listData.length;
+    }
   },
 
   created() {
@@ -79,10 +79,11 @@ export default {
 
     getListItems() {
       this.loading.page = true;
-      this.$store
-        .dispatch("fetchPokemons")
-        .then(meta => {
-          this.meta = meta;
+      this.$axios("https://pokeapi.co/api/v2/pokemon")
+        .then(res => {
+          this.listData = res.data.results;
+          this.next = res.data.next;
+          this.count = res.data.count;
           this.loading.page = false;
         })
         .catch(() => (this.loading.page = false));

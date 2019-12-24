@@ -1,9 +1,9 @@
 <template>
   <div class="home">
-    <v-parallax class="home__hero" src="@/assets/imgs/hero-img.jpg">
+    <!-- <v-parallax class="home__hero" src="@/assets/imgs/hero-img.jpg">
       <div class="overlay" />
       <h1 class="home__hero__title" v-text="'POKEDEX'" />
-    </v-parallax>
+    </v-parallax> -->
 
     <main class="home__body">
       <v-container>

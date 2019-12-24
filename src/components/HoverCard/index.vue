@@ -7,7 +7,7 @@
     max-width="400"
     :style="position"
   >
-    <!-- <v-card-title v-text="data.name" /> -->
+    <v-card-title>{{ data.name }}</v-card-title>
     <!-- <v-card-subtitle></v-card-subtitle>
     <v-card-text></v-card-text> -->
     <!-- <v-card-actions></v-card-actions> -->
@@ -34,7 +34,7 @@ export default {
         transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`
       };
     },
-    ...mapGetters(["pokemonList", "hoverCard"])
+    ...mapGetters(["hoverCard"])
   },
 
   methods: {
@@ -45,17 +45,6 @@ export default {
         this.loading = false;
       });
     },
-    // getData(item) {
-    //   this.loading = true;
-    //   reqTimer().then(() => {
-    //     if (this.hoverCard.active) {
-    //       this.$store
-    //         .dispatch("fetchItem", item)
-    //         .then(() => (this.loading = false))
-    //         .catch(() => (this.loading = false));
-    //     }
-    //   });
-    // },
 
     storeData(data) {
       this.$store.dispatch("appendPokemon", data);
