@@ -5,6 +5,18 @@
     left: 0;
     z-index: 1;
     transition: transform 0.5s cubic-bezier(0.02, 1.25, 0.8, 1);
+    & > * {
+      margin: auto;
+    }
+  }
+
+  &__img {
+    text-align: center;
+  }
+
+  &__title {
+    text-align: center;
+    font-size: $font-md-1;
   }
 
   &.details-card {

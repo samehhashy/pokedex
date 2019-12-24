@@ -1,11 +1,8 @@
-import Vue from "vue";
 import axios from "axios";
 
-const globalAxios = axios.create({
-  baseURL: "https://pokeapi.co/api/v2",
+export const globalAxios = axios.create({
+  baseURL: process.env.VUE_APP_BASE_URL,
   timeout: 10000
 });
-
-Vue.prototype.$axios = globalAxios;
 
 export default globalAxios;

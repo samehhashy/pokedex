@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="10" class="app-card details-card">
+  <v-card elevation="10" class="hover-card details-card">
     {{ data }}
   </v-card>
 </template>

@@ -79,7 +79,7 @@ export default {
 
     getListItems() {
       this.loading.page = true;
-      this.$axios("https://pokeapi.co/api/v2/pokemon")
+      this.$axios("pokemon")
         .then(res => {
           this.listData = res.data.results;
           this.next = res.data.next;
