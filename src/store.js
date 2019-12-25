@@ -2,12 +2,16 @@ import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersist from "vuex-persist";
 import $axios from "@/plugins/axios";
+import { getId } from "@/utils/helpers";
 
 const vuexLocalStorage = new VuexPersist({
   key: "pokedex",
   storage: window.localStorage,
-  // specifying only a certain state item to be cached
-  reducer: state => ({ pokemonItems: state.pokemonItems })
+  // specifying only a certain state-item to be cached
+  reducer: state => ({
+    pokemonItems: state.pokemonItems,
+    ["evolution-chainItems"]: state["evolution-chainItems"]
+  })
 });
 
 Vue.use(Vuex);
@@ -16,7 +20,9 @@ export default new Vuex.Store({
   state: {
     pokemonList: [],
     pokemonItems: [],
-    currPokemon: {},
+    ["evolution-chainItems"]: [],
+    pokemon: {},
+    evolution: {},
     hoverCard: {
       active: false,
       url: "",
@@ -33,52 +39,43 @@ export default new Vuex.Store({
     },
 
     APPEND_ITEM(state, payload) {
-      state.pokemonItems.push(payload);
+      state[`${payload.field}Items`].push(payload.data);
     },
 
     SET_HOVER_CARD(state, payload) {
       state.hoverCard = payload;
+    },
+
+    RETRIEVE_CACHED_ITEM(state, data) {
+      const index = state[`${data.field}Items`].map(item => item.id).indexOf(data.id);
+      state[data.field === "evolution-chain" ? "evolution" : "pokemon"] =
+        state[`${data.field}Items`][index];
     }
   },
 
   actions: {
-    fetchPokemons({ commit }) {
+    retrieveItem({ commit, state, dispatch, getters }, { field, id = getId(state.hoverCard.url) }) {
       return new Promise((resolve, reject) => {
-        $axios("pokemon")
-          .then(res => {
-            commit("APPEND_LIST_PAGE", res.data.results);
-            resolve({ next: res.data.next, count: res.data.count });
-          })
-          .catch(() => {
-            reject();
-          });
+        const exists = getters.itemExists(id, field);
+        if (exists) {
+          commit("RETRIEVE_CACHED_ITEM", { field, id });
+          resolve(state.pokemon);
+          return;
+        }
+        dispatch("fetchItem", { url: `${field}/${id}`, field })
+          .then(data => resolve(data))
+          .catch(() => reject());
       });
     },
 
-    getHoverItem({ commit, state }) {
-      const url = state.hoverCard.url;
-      // extracting the item id from the url string
-      const id = Number(url.split("/")[url.split("/").length - 2]);
-
+    fetchItem({ commit }, payload) {
       return new Promise((resolve, reject) => {
-        const exists = state.pokemonItems.some(item => item.id === id);
-        // in case if the item has already been fetched & cached before
-        if (exists) {
-          const index = state.pokemonItems.map(item => item.id).indexOf(id);
-          const item = state.pokemonItems[index];
-          resolve(item);
-          return;
-        }
-        // Otherwise -> in case if the item is being hovered-over for the first time, make a request
-        $axios(url)
+        $axios(payload.url)
           .then(res => {
-            // mutate the state with the new item in order to be cached for future queries
-            commit("APPEND_ITEM", res.data);
+            commit("APPEND_ITEM", { data: res.data, field: payload.field });
             resolve(res.data);
           })
-          .catch(() => {
-            reject();
-          });
+          .catch(() => reject());
       });
     },
 
@@ -93,8 +90,11 @@ export default new Vuex.Store({
 
   getters: {
     pokemonList: state => state.pokemonList,
-    currPokemon: state => state.currPokemon,
-    hoverCard: state => state.hoverCard
+    pokemonItems: state => state.pokemonItems,
+    pokemon: state => state.pokemon,
+    evolution: state => state.evolution,
+    hoverCard: state => state.hoverCard,
+    itemExists: state => (id, field) => state[`${field}Items`].some(item => item.id === id)
   },
 
   plugins: [vuexLocalStorage.plugin]

@@ -2,11 +2,18 @@
   <v-card
     elevation="5"
     :loading="loading"
+    loader-height="10"
     class="app-card app-card--floating"
-    max-width="500"
+    min-width="265"
+    min-height="466"
     :style="position"
   >
-    <v-img max-width="100" :src="cardImg" class="app-card__img" />
+    <v-img
+      v-if="this.data.sprites"
+      max-width="100"
+      :src="this.data.sprites.front_default"
+      class="app-card__img"
+    />
     <h2 class="app-card__title">{{ data.name }}</h2>
 
     <v-simple-table>
@@ -51,11 +58,7 @@ export default {
         transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`
       };
     },
-    ...mapGetters(["hoverCard"]),
-
-    cardImg() {
-      return this.data && this.data.sprites ? this.data.sprites.front_default : "";
-    }
+    ...mapGetters(["hoverCard"])
   },
 
   methods: {
@@ -63,7 +66,7 @@ export default {
 
     getData() {
       this.loading = true;
-      this.$store.dispatch("getHoverItem").then(data => {
+      this.$store.dispatch("retrieveItem", { field: "pokemon" }).then(data => {
         this.data = data;
         this.loading = false;
       });
@@ -77,6 +80,7 @@ export default {
   watch: {
     "hoverCard.active": {
       handler(isActive) {
+        this.data = {};
         isActive && this.getData();
       }
     }

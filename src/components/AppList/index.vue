@@ -17,6 +17,7 @@
             })
           "
           @mouseleave="toggleHoverCard"
+          @click="getData(getId(item.url))"
         >
           <v-list-item-avatar class="app-list__avatar">
             <v-img class="app-list__avatar__img" src="@/assets/icons/pokemon-icon.svg" />
@@ -36,12 +37,12 @@
       <!-- PAGINATION -->
       <v-list-item-action class="app-list__action">
         <v-btn
-          :loading="loading.page"
+          :loading="loading"
           v-if="hasNextPage"
           depressed
           block
           class="btn btn--more"
-          @click="$emit('load-more')"
+          @click="getListItems(next)"
           >Load More</v-btn
         >
       </v-list-item-action>
@@ -51,6 +52,7 @@
 
 <script>
 import upperFirst from "lodash/upperFirst";
+import { getId } from "@/utils/helpers";
 
 export default {
   name: "AppList",
@@ -60,7 +62,7 @@ export default {
       listData: [],
       next: "",
       count: 0,
-      loading: { list: false, page: false }
+      loading: false
     };
   },
 
@@ -76,21 +78,30 @@ export default {
 
   methods: {
     upperFirst,
+    getId,
 
-    getListItems() {
-      this.loading.page = true;
-      this.$axios("pokemon")
+    getListItems(url = "pokemon") {
+      this.loading = true;
+      this.$axios(url)
         .then(res => {
-          this.listData = res.data.results;
+          this.listData.push(...res.data.results);
           this.next = res.data.next;
           this.count = res.data.count;
-          this.loading.page = false;
+          this.loading = false;
         })
-        .catch(() => (this.loading.page = false));
+        .catch(() => (this.loading = false));
     },
 
     toggleHoverCard(payload) {
       this.$store.dispatch("toggleHoverCard", payload);
+    },
+
+    getData(id) {
+      this.loading = true;
+      this.$store.dispatch("retrieveItem", { field: "evolution-chain", id }).then(data => {
+        this.data = data;
+        this.loading = false;
+      });
     }
   }
 };
